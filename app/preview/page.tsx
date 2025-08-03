@@ -4,7 +4,8 @@ import { useFormContext } from "@/components/FormContext";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Download } from "lucide-react";
-
+// @ts-ignore
+import html2pdf from "html2pdf.js";
 import { useRef } from "react";
 
 const Page = () => {
@@ -12,19 +13,19 @@ const Page = () => {
   const router = useRouter();
   const pdfRef = useRef<HTMLDivElement>(null);
 
-  // const handleDownload = () => {
-  //   if (pdfRef.current) {
-  //     html2pdf()
-  //       .from(pdfRef.current)
-  //       .set({
-  //         margin: 0.5,
-  //         filename: `${formData.name}_resume.pdf`,
-  //         html2canvas: { scale: 2 },
-  //         jsPDF: { format: "a4", orientation: "portrait" },
-  //       })
-  //       .save();
-  //   }
-  // };
+  const handleDownload = () => {
+    if (pdfRef.current) {
+      html2pdf()
+        .from(pdfRef.current)
+        .set({
+          margin: 0.5,
+          filename: `${formData.name}_resume.pdf`,
+          html2canvas: { scale: 2 },
+          jsPDF: { format: "a4", orientation: "portrait" },
+        })
+        .save();
+    }
+  };
 
   return (
     <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 py-8">
@@ -79,7 +80,7 @@ const Page = () => {
       {/* Download Button */}
       <div className="w-full max-w-2xl mt-6">
         <Button
-          // onClick={handleDownload}
+          onClick={handleDownload}
           className="w-full bg-gradient-to-r from-green-600 to-green-800 text-white font-semibold flex items-center justify-center gap-2"
         >
           <Download size={18} />
