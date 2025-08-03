@@ -52,7 +52,7 @@ const Page = () => {
     doc.text(`Phone: ${data.phone}`, 10, 50);
     doc.text(`Position: ${data.position}`, 10, 60);
 
-    // Handle long description properly
+
     doc.text("Description:", 10, 70);
     const lines = doc.splitTextToSize(data.description, 180);
     doc.text(lines, 10, 80);
