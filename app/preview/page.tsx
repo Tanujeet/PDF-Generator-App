@@ -4,7 +4,8 @@ import { useFormContext } from "@/components/FormContext";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Download } from "lucide-react";
-// @ts-ignore
+// @ts-expect-error
+
 import html2pdf from "html2pdf.js";
 import { useRef } from "react";
 
