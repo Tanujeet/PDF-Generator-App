@@ -24,6 +24,7 @@ const Page = () => {
           jsPDF: { format: "a4", orientation: "portrait" },
         })
         .save();
+      console.log("PDF Ref:", pdfRef.current); // should not be null
     }
   };
 
@@ -40,7 +41,6 @@ const Page = () => {
         </Button>
       </div>
 
-      {/* PDF Preview Card */}
       <div
         ref={pdfRef}
         className="bg-white shadow-md border p-8 rounded-md w-full max-w-2xl text-gray-700"
@@ -77,7 +77,6 @@ const Page = () => {
         </div>
       </div>
 
-      {/* Download Button */}
       <div className="w-full max-w-2xl mt-6">
         <Button
           onClick={handleDownload}
