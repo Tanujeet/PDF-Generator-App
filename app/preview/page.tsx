@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Download } from "lucide-react";
 import { useRef } from "react";
+import jsPDF from "jspdf";
 
-// ✅ Optional: Avoid Next.js trying to statically pre-render this page
 export const dynamic = "force-dynamic";
 
 const Page = () => {
@@ -14,20 +14,23 @@ const Page = () => {
   const router = useRouter();
   const pdfRef = useRef<HTMLDivElement>(null);
 
-  const handleDownload = async () => {
-    if (pdfRef.current) {
-      const html2pdf = (await import("html2pdf.js")).default;
+  const handleDownload = () => {
+    const doc = new jsPDF();
 
-      html2pdf()
-        .from(pdfRef.current)
-        .set({
-          margin: 0.5,
-          filename: `${formData.name}_resume.pdf`,
-          html2canvas: { scale: 2 },
-          jsPDF: { format: "a4", orientation: "portrait" },
-        })
-        .save();
+    doc.setFontSize(16);
+    doc.text("Resume", 10, 10);
+    doc.setFontSize(12);
+
+    doc.text(`Name: ${formData.name}`, 10, 30);
+    doc.text(`Email: ${formData.email}`, 10, 40);
+    doc.text(`Phone: ${formData.phone}`, 10, 50);
+    if (formData.position) doc.text(`Position: ${formData.position}`, 10, 60);
+    if (formData.description) {
+      doc.text("Description:", 10, 70);
+      doc.text(doc.splitTextToSize(formData.description, 180), 10, 80);
     }
+
+    doc.save(`${formData.name || "resume"}.pdf`);
   };
 
   return (

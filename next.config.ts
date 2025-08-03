@@ -4,5 +4,6 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
 };
+devIndicators: false;
 
 module.exports = nextConfig;

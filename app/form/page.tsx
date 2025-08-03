@@ -9,6 +9,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User, Mail, Phone, Briefcase, FileText, Download } from "lucide-react";
 import { useFormContext } from "@/components/FormContext";
+import jsPDF from "jspdf";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -39,7 +40,24 @@ const Page = () => {
 
   const onDownload = (data: FormSchema) => {
     setFormData(data);
-    // PDF download logic will be added in preview
+
+    const doc = new jsPDF();
+
+    doc.setFontSize(16);
+    doc.text("Resume", 10, 10);
+    doc.setFontSize(12);
+
+    doc.text(`Name: ${data.name}`, 10, 30);
+    doc.text(`Email: ${data.email}`, 10, 40);
+    doc.text(`Phone: ${data.phone}`, 10, 50);
+    doc.text(`Position: ${data.position}`, 10, 60);
+
+    // Handle long description properly
+    doc.text("Description:", 10, 70);
+    const lines = doc.splitTextToSize(data.description, 180);
+    doc.text(lines, 10, 80);
+
+    doc.save(`${data.name}_resume.pdf`);
   };
 
   const inputStyle =
