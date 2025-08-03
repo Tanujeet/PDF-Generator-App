@@ -4,18 +4,20 @@ import { useFormContext } from "@/components/FormContext";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Download } from "lucide-react";
-// @ts-expect-error
-
-import html2pdf from "html2pdf.js";
 import { useRef } from "react";
+
+// ✅ Optional: Avoid Next.js trying to statically pre-render this page
+export const dynamic = "force-dynamic";
 
 const Page = () => {
   const { formData } = useFormContext();
   const router = useRouter();
   const pdfRef = useRef<HTMLDivElement>(null);
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (pdfRef.current) {
+      const html2pdf = (await import("html2pdf.js")).default;
+
       html2pdf()
         .from(pdfRef.current)
         .set({
@@ -25,7 +27,6 @@ const Page = () => {
           jsPDF: { format: "a4", orientation: "portrait" },
         })
         .save();
-      console.log("PDF Ref:", pdfRef.current); // should not be null
     }
   };
 
@@ -51,24 +52,20 @@ const Page = () => {
             <p className="font-semibold w-32">Name:</p>
             <p>{formData.name}</p>
           </div>
-
           <div className="flex">
             <p className="font-semibold w-32">Email:</p>
             <p>{formData.email}</p>
           </div>
-
           <div className="flex">
             <p className="font-semibold w-32">Phone Number:</p>
             <p>{formData.phone}</p>
           </div>
-
           {formData.position && (
             <div className="flex">
               <p className="font-semibold w-32">Position:</p>
               <p>{formData.position}</p>
             </div>
           )}
-
           {formData.description && (
             <div className="flex items-start">
               <p className="font-semibold w-32">Description:</p>
